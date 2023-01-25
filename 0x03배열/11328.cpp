@@ -15,27 +15,21 @@ int main(){
 
     for (int i=0; i<n; i++){
         cin >> a >> b;
-        if (a.size() != b.size()){
-            cout << "Impossible" << '\n';
-            continue;
-        }
+        
+        for (char c: a) arr[c-'a']++;
+        for (char c: b) arr[c-'a']--;
 
-        memset(arr, 0, sizeof(arr));
-        for (char c: a){
-            arr[c-'a']++;
-        }
-        bool isNext = false;
-        for (char c: b){
-            if (arr[c-'a'] <= 0) {
-                cout << "Impossible" << '\n';
-                isNext = true;
-                break; 
+        bool isPossible = true;
+        for (int i: arr){
+            if (i != 0) {
+                isPossible = false;
+                break;
             }
-            arr[c-'a']--;
         }
-        if (isNext) continue;
+        
+        if (isPossible) cout << "Possible" << '\n';
+        else cout << "Impossible" << '\n';
 
-        cout << "Possible" << '\n';
     }
 
     return 0;
