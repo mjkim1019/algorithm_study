@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,12 +12,11 @@ int solution(string S) {
         arr[c-'A']++;
     }
     // BANANA -> B: 1 A: 3 N: 2
-    while (arr['B'-'A'] >=1 && arr['A'-'A'] >=3 && arr['N'-'A'] >=2) {
-        ans++;
-        arr['B' - 'A'] -= 1;
-        arr['A' - 'A'] -= 3;
-        arr['N' - 'A'] -= 2;
-    }
+    int b = arr['B'-'A'];
+    int a = arr['A'-'A']/3;
+    int n = arr['N'-'A']/2;
+    ans = min(min(b,n), a);
+
     return ans;
 }
 
