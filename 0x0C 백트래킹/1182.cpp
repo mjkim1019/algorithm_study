@@ -4,29 +4,16 @@ using namespace std;
 
 int N, S;
 int input[21];
-int isUsed[21];
 int ans = 0;
 
-void func(int L) {
+void func(int L, int sum) {
     if (L == N){
-        int sum = 0;
-        bool isEmpty = true;
-        for (int i=0; i<N; i++){
-            if (isUsed[i]){
-                sum += input[i];
-                isEmpty = false;
-            }
-        }
-
-        if (!isEmpty && sum == S) ans++;
+        if (sum == S) ans++;
         return;
     }
     
-    isUsed[L] = true;
-    func(L+1);
-    isUsed[L] = false;
-    func(L+1);
-
+    func(L+1, sum);
+    func(L+1, sum + input[L]);
 }
 
 int main(){
@@ -34,7 +21,8 @@ int main(){
     cin.tie(0);
     cin >> N >> S;
     for (int i=0; i<N; i++) cin >> input[i];
-    func(0);
+    func(0, 0);
+    if (S == 0) ans--; // 공집합이 답에 추가되는 경우는 S가 0일때만
     cout << ans;
 
     return 0;
