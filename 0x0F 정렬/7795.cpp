@@ -3,9 +3,6 @@
 #include <algorithm>
 using namespace std;
 
-bool cmp(int a, int b){
-    return a < b;
-}
 
 int main(){
     ios::sync_with_stdio(0);
@@ -17,29 +14,30 @@ int main(){
         int N, M;
         cin >> N >> M;
 
-        vector<int> A;
+        vector<pair<int, int> > v;
+        
         for (int i=0; i<N; i++) {
             int tmp; cin >> tmp;
-            A.push_back(tmp);
+            v.push_back(make_pair(tmp, 0)); // A
         }
-        vector<int> B;
         for (int i=0; i<M; i++) {
             int tmp;
             cin >> tmp;
-            B.push_back(tmp);
+            v.push_back(make_pair(tmp, 1)); // B
         }
 
-        sort(A.begin(), A.end(), cmp);
-        sort(B.begin(), B.end());
+        sort(v.begin(), v.end());
 
-        int cnt = 0;
-        for (int a: A){
-            for (int b: B){
-                if (a > b) cnt++;
-                else break;
-            }
+        int cnt=0;
+        int ans = 0;
+        for (int i=0; i< N+M; i++){
+            if (v[i].second == 0) {
+                ans += cnt;
+            } else cnt++; // b가 더 작음 
         }
-        cout << cnt << '\n';
+
+        
+        cout << ans << '\n';
     }
 
 
