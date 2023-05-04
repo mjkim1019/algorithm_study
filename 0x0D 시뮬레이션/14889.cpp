@@ -1,48 +1,31 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-int N;
-int s[22][22];
-int ans;
+int n;
+int a[25][25];
 
-int main(){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
+int main(void) {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
 
-    cin >> N;
-    for (int i=1; i<=N; i++)
-        for (int j=1; j<=N; j++)
-            cin >> s[i][j];
-    
-    ans = 100*N/2; 
+  cin >> n;
+  for (int i = 0; i < n; i++)
+    for (int j = 0; j < n; j++) cin >> a[i][j];
 
-    vector<bool> num(N);
-    fill(num.begin()+(N/2), num.end(), true);
-    do{
-        vector<int> start;
-        vector<int> link;
-        for (int i=0; i<N; i++){
-            if (num[i]) start.push_back(i+1);
-            else link.push_back(i+1);
-        }
-        
-        int s_ability = 0;
-        for (int i=0; i<start.size(); i++)
-            for (int j=0; j<start.size(); j++)
-                s_ability += s[start[i]][start[j]];
-            
-        int l_ability = 0;
-        for (int i = 0; i < link.size(); i++)
-            for (int j = 0; j < link.size(); j++)
-                l_ability += s[link[i]][link[j]];
-
-        ans = min(ans, abs(s_ability-l_ability));
-
-    }while(next_permutation(num.begin(), num.end()));
-
-    cout << ans;
-
-    return 0;
+  vector<int> team(n);
+  fill(team.begin() + n / 2, team.end(), 1);
+  int ans = 0x7f7f7f7f;
+  // team = {0, 0, 0, .., 0, 1, 1, .. ,1}, team[i]는 i번째 선수의 팀을 의미
+  do {
+    int diff = 0; // 능력치의 차이
+    for (int i = 0; i < n; i++) {
+      for (int j = i+1; j < n; j++){
+        if(team[i] != team[j]) continue;
+        if(team[i] == 0) diff += (a[i][j] + a[j][i]);
+        else diff -= (a[i][j] + a[j][i]);
+      }
+    }
+    ans = min(ans, abs(diff));    
+  } while (next_permutation(team.begin(), team.end()));
+  cout << ans;
 }
