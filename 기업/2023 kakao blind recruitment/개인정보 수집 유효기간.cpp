@@ -21,8 +21,7 @@ vector<int> solution(string today, vector<string> terms, vector<string> privacie
         stringstream ss(term);
         char c;
         int n;
-        ss >> c;
-        ss >> n;
+        ss >> c >> n;
         M[c] = n;
     }
 
@@ -30,10 +29,9 @@ vector<int> solution(string today, vector<string> terms, vector<string> privacie
     for (int i=0; i<privacies.size(); i++){
         stringstream ss(privacies[i]);
         string str;
-        ss >> str;
-        int sumday = stringToDaysum(str);
         char c;
-        ss >> c;
+        ss >> str >> c;
+        int sumday = stringToDaysum(str);
         int limit = M[c]*28 + sumday;
         
         if (todaySum >= limit) answer.push_back(i+1);
