@@ -9,27 +9,22 @@ int main(){
     string str;
     cin >> str;
 
-    bool isMinus = false;
+    int sign = 1;
     int ans = 0;
-    int st = 0;
-    for (int idx=0; idx<str.size(); idx++){
-        //cout << "idx = " << idx <<'\n';
-        if (str[idx] == '-'){
-            isMinus = true; continue;
-        } else if (str[idx] == '+') continue;
-
-        int i = idx;
-        while (str[i] >= '0' && str[i] <='9') i++; 
-        
-        int num = stoi(str.substr(idx, i-idx));
-        if (isMinus) ans -= num;
-        else ans += num;
-        
-        if (i == str.size()) break;
-        idx = i-1;
+    int tmp = 0;
+    for (int i=0; i<str.size(); i++){
+        if (str[i] == '-' || str[i] == '+') {
+            ans += tmp *sign;
+            if (str[i] == '-') sign = -1;
+            tmp = 0;
+        }
+        else {
+            tmp *= 10;
+            tmp += str[i] - '0';
+        }
     }
-    
-    
+
+    ans += tmp*sign;
     cout << ans;
 
     return 0;
