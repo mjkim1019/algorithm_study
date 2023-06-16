@@ -3,6 +3,7 @@
 #include <vector>
 using namespace std;
 
+//패딩 먼저 채우고 자리 옮긴 후 자기 크기만큼 하면 #로 채우기
 char mem[20][10]; // 16 * 8
 
 string solution(vector<string> &v)
@@ -18,38 +19,28 @@ string solution(vector<string> &v)
         int sp = 0;
         if (cmd == "BOOL")
         {
-            cout << "(" << i << ", " << j << ")" << '\t';
             mem[i][j] = '#';
             j += 1;
-            cout << "(" << i << ", " << j << ")" << '\n';
-            continue;
         }
         else if (cmd == "SHORT")
         {
-            sp = 2;
-            if ((j + sp) % 2 != 0)
-            {
-                while ((j + sp) % 2 != 0 && j < 8)
-                {
-                    mem[i][j] = '.';
-                    j++;
-                    if (j == 8) {j=0; i++;}
-                }
+            while (j %2 != 0){
+                mem[i][j] = '.';
+                j++;
+                if (j == 8) {i+=1; j=0;}
             }
+            for (int k=0; k<2; k++) mem[i][j+k] = '#';
+            j += 2;
         }
         else if (cmd == "FLOAT")
         {
-            sp = 4;
-            while ((j + sp) % 4 != 0)
-            {
+            while (j %4 != 0){
                 mem[i][j] = '.';
                 j++;
-                if (j == 8)
-                {
-                    j = 0;
-                    i++;
-                }
+                if (j==8) {i++; j=0;}
             }
+            for (int k=0; k<4; k++) mem[i][j+k] = '#';
+            j += 4;
         }
         else if (cmd == "INT")
         {
@@ -58,43 +49,28 @@ string solution(vector<string> &v)
             {
                 mem[i][j] = '.';
                 j++;
-                if (j == 8)
-                {
-                    j = 0;
-                    i++;
-                }
+                if (j == 8){ i++; j=0; }
             }
+            for (int k = 0; k < 8; k++) mem[i][j + k] = '#';
+            i++;
         }
         else if (cmd == "LONG")
         {
             sp = 16;
-            if (j != 0)
+
+            while (j != 0)
             {
-                while (j != 0)
-                {
-                    mem[i][j++] = '.';
-                    j %= 8;
-                }
-                i++;
+                mem[i][j] = '.';
+                j++;
+                if (j == 8) {i++; j = 0;}
             }
+
             for (int k=0; k<2; k++)
                 for (int m=0; m<8; m++) mem[i+k][m] = '#';
             i += 2;
-            if (i >= 16)
-                return "HALT";
-            continue;
         }
-
-        cout << "(" << i << ", " << j << ")" << '\t';
-        int cnt = 0;
-        while (cnt++<sp){
-            mem[i][j%8] = '#';
-            j++;
-            if (j==8) i++;
-        }
-        j %= 8;
         cout << "(" << i << ", " << j << ")" << '\n';
-
+        
         if (i >= 16) return "HALT";
     }
 
@@ -126,19 +102,12 @@ int main()
     cin.tie(0);
 
     vector<string> v;
-    v.push_back("BOOL");
-    v.push_back("LONG");
+    v.push_back("FLOAT");
     v.push_back("SHORT");
-    v.push_back("LONG");
     v.push_back("BOOL");
-    v.push_back("LONG");
     v.push_back("BOOL");
-    v.push_back("LONG");
     v.push_back("BOOL");
-    v.push_back("LONG");
-    v.push_back("SHORT");
-    v.push_back("LONG");
-    v.push_back("LONG");
+    v.push_back("INT");
 
     cout << solution(v);
 
