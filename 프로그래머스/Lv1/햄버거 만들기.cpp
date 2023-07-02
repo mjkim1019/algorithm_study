@@ -2,30 +2,19 @@
 
 using namespace std;
 
-int hambuger[4] = {1, 3, 2, 1};
 
 int solution(vector<int> ingredient) {
     int answer = 0;
     
-    stack<int> S;
-    for (int i=0; i<ingredient.size(); i++){
-        S.push(ingredient[i]);
-        if (S.size() <4) continue;
-        
-        stack<int> S2;
-        int cnt = 0;
-        while (!S.empty() && cnt < 4){
-            if (S.top() != hambuger[cnt]) break;
-            S2.push(S.top()); S.pop();
-            cnt++;
+    vector<int> v = {-1};
+    for (int x: ingredient){
+        if (v.back() == 1 && x == 2) v.back() = 12;
+        else if (v.back() == 12 && x == 3) v.back() = 123;
+        else if (v.back() == 123 && x == 1) {
+            answer++;
+            v.pop_back();
         }
-        if (cnt == 4) answer++;
-        else {
-            while (!S2.empty()){
-                S.push(S2.top()); 
-                S2.pop();
-            }
-        }
+        else v.push_back(x);
     }
     
     return answer;
