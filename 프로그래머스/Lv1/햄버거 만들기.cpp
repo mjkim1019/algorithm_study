@@ -9,10 +9,8 @@ int solution(vector<int> ingredient) {
     
     stack<int> S;
     for (int i=0; i<ingredient.size(); i++){
-        if (S.size() <4) {
-            S.push(ingredient[i]);
-            continue;
-        }
+        S.push(ingredient[i]);
+        if (S.size() <4) continue;
         
         stack<int> S2;
         int cnt = 0;
@@ -25,7 +23,7 @@ int solution(vector<int> ingredient) {
         else {
             while (!S2.empty()){
                 S.push(S2.top()); 
-                S.pop();
+                S2.pop();
             }
         }
     }
