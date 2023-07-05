@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <unordered_map>
 using namespace std;
 
 
@@ -14,20 +13,16 @@ int main(){
     int N, M;
     cin >> N;
     vector<int> arr(N);
-    unordered_map<int, int> mp;
-    for (int i=0; i<N; i++) {
+    for (int i=0; i<N; i++) 
         cin >> arr[i];
-        mp[arr[i]]++;
-    }
+      
     sort(arr.begin(), arr.end());
-    arr.erase(unique(arr.begin(), arr.end()), arr.end());
 
     cin >> M;
     for (int i=0; i<M; i++){
         int tmp;
         cin >> tmp;
-        if (binary_search(arr.begin(), arr.end(), tmp)) answer.push_back(mp[tmp]);
-        else answer.push_back(0);
+        answer.push_back(upper_bound(arr.begin(), arr.end(), tmp) - lower_bound(arr.begin(), arr.end(), tmp));
     }
     
     for (int i=0; i<answer.size(); i++) {
