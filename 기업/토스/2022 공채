@@ -1,0 +1,68 @@
+
+class Solution {
+
+    fun solution(assets: Array<String>): Array<String> =
+        assets.mapNotNull { kotlin.runCatching { it.toAsset() }.getOrNull() }
+            .filter(Asset::isValid)
+            .sorted()
+            .map(Asset::text)
+            .distinct()
+            .toTypedArray()
+
+
+}
+
+object ValidationError : Throwable()
+
+fun String.toAsset(): Asset = when {
+    length != 9 -> throw ValidationError
+    slice(0..1).toIntOrNull() == null -> throw ValidationError
+    this[2] != '-' -> throw ValidationError
+    kotlin.runCatching { Asset.Code.valueOf(slice(3..4)) }.isFailure -> throw ValidationError
+    slice(5..6).toIntOrNull() == null -> throw ValidationError
+    slice(7..8).toIntOrNull() == null -> throw ValidationError
+    else -> Asset(
+        text = this,
+        yy = slice(0..1).toInt(),
+        code = Asset.Code.valueOf(slice(3..4)),
+        mm = slice(5..6).toInt(),
+        number = slice(7..8).toInt(),
+    )
+}
+
+data class Asset(
+    val text: String,
+    val yy: Int,
+    val code: Code,
+    val mm: Int,
+    val number: Int,
+) : Comparable<Asset> {
+
+    enum class Code {
+        SP, KE, MO, CO, DE
+    }
+
+    val isValid: Boolean
+        get() {
+            return (yy in 13..22) && (mm in 1..12) && when {
+                yy == 13 -> mm in 4..12
+                yy == 22 -> mm in 1..8
+                else -> true
+            } && (number in 1..99)
+        }
+
+
+    override fun compareTo(other: Asset): Int {
+        return when {
+            yy > other.yy -> 1
+            yy < other.yy -> -1
+            code.ordinal > other.code.ordinal -> 1
+            code.ordinal < other.code.ordinal -> -1
+            mm > other.mm -> 1
+            mm < other.mm -> -1
+            number > other.number -> 1
+            number < other.number -> -1
+            else -> 0
+        }
+    }
+}
