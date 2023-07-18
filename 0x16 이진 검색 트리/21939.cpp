@@ -1,8 +1,5 @@
 #include <iostream>
 #include <set>
-#include <unordered_map>
-#define X first
-#define Y second
 
 using namespace std;
 
@@ -12,13 +9,13 @@ int main(){
 
     int N;
     cin >> N;
-    set<pair<int, int> > s; // 난이도, 번호
-    unordered_map<int, int> m; // 문제 번호 : 난이도
+    set<int> level[102]; // 난이도별로 문제 저장
+    int number[100002]; // 문제 번호 : 난이도
     while (N--) {
         int a, b;
         cin >> a >> b;
-        s.insert({b, a});
-        m[a] = b;
+        level[b].insert(a);
+        number[a] = b;
     }
 
     int M;
@@ -29,21 +26,27 @@ int main(){
         if (cmd == "add"){
             int a, b;
             cin >> a >> b;
-            s.insert({b, a});
+            level[b].insert(a);
+            number[a] = b;
         } else if (cmd == "recommend"){
             int n; cin >> n;
-            if (n == 1){
-                auto num = *prev(s.end());
-                cout << num.Y << '\n';
-            } else if (n == -1){
-                cout << (*s.begin()).Y <<'\n';
+            if (n == 1){ // 가장 어려운 문제
+                for(int i=100; i>=0; i--){
+                    if (level[i].empty()) continue;
+                    cout << *prev(level[i].end()) << '\n';
+                    break;
+                }
+            } else if (n == -1){ // 가장 쉬운 문제
+                for (int i=0; i<=100; i++){
+                    if (level[i].empty()) continue;
+                    cout << *(level[i].begin()) << '\n';
+                    break;
+                }
             }
         } else if (cmd == "solved"){
             int p; cin >> p;
-            if (m.find(p) != m.end()) {
-                int level = m.find(p) -> second;
-                s.erase({level, p});
-            }
+            level[number[p]].erase(p);
+            number[p] = 0;
         }
     }
 
